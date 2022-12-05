@@ -1,0 +1,139 @@
+mkdir cbrozmann
+# conda installation like in: https://dev.to/waylonwalker/installing-miniconda-on-linux-from-the-command-line-4ad7
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+~/miniconda3/bin/conda init bash
+conda create -n cbrozmann python=3.8
+# 
+conda activate cbrozmann
+#install requirements
+mkdir TORCH_HOME
+mkdir git
+# install torch
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+# download architectures from google
+pip install gdown
+cd TORCH_HOME/
+gdown --id 17_saCsj_krKjlCBLOJEpNtzPXArMCqxU
+tar -xvf NATS-tss-v1_0-3ffb9-simple.tar
+# download unchanged XAutoDL and NAS-Bench-201
+cd ../git/
+git clone --recurse-submodules https://github.com/D-X-Y/AutoDL-Projects.git XAutoDL
+pip install nas-bench-201
+# download my code (Version 13.05.) and prepare
+git clone https://gitlab.uni-koblenz.de/cbrozmann/nas-thesis.git
+cd ..
+# move data set to torch home
+mv git/nas-thesis/data_sets/* TORCH_HOME
+# clone changed code in XAutodl
+cd git/
+cp nas-thesis/changed_code/configs/nas-benchmark/hyper-opts/* XAutoDL/configs/nas-benchmark/hyper-opts/
+cp nas-thesis/changed_code/configs/nas-benchmark/*.json XAutoDL/configs/nas-benchmark/
+cp nas-thesis/changed_code/scripts/NATS-Bench/* XAutoDL/scripts/NATS-Bench/
+cp nas-thesis/changed_code/xautodl/datasets/* XAutoDL/xautodl/datasets/
+cp nas-thesis/changed_code/exps/NATS-Bench/* XAutoDL/exps/NATS-Bench/
+# install XAutoDL with the changed code
+cd XAutoDL/
+pip install .
+# get torch home path
+cd ../../TORCH_HOME/
+echo $PWD
+# (copy the result)
+# set TORCH_HOME with the copied path (to get data sets and architectures)
+export TORCH_HOME=/home/cbrozmann/TORCH_HOME
+cd ../git/XAutoDL/
+# training can start
+
+# training
+tmux
+conda activate cbrozmann
+export TORCH_HOME=/home/cbrozmann/TORCH_HOME
+cd git/XAutoDL/
+# all commands in training calls are the used in the thesis
+
+# training calls
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 00000-00781 200 "777 888 999" >& ~/cbrozmann/log_00_utd_train.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 00782-01563 200 "777 888 999" >& ~/cbrozmann/log_01_utd_train.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 01564-02345 200 "777 888 999" >& ~/cbrozmann/log_02_utd_train.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 02346-03127 200 "777 888 999" >& ~/cbrozmann/log_03_utd_train.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 03128-03909 200 "777 888 999" >& ~/cbrozmann/log_04_utd_train.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 03910-04691 200 "777 888 999" >& ~/cbrozmann/log_05_utd_train.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 04692-05473 200 "777 888 999" >& ~/cbrozmann/log_06_utd_train.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 05474-06255 200 "777 888 999" >& ~/cbrozmann/log_07_utd_train.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 06256-07037 200 "777 888 999" >& ~/cbrozmann/log_08_utd_train.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 07038-07819 200 "777 888 999" >& ~/cbrozmann/log_09_utd_train.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 07820-08601 200 "777 888 999" >& ~/cbrozmann/log_10_utd_train.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 08602-09383 200 "777 888 999" >& ~/cbrozmann/log_11_utd_train.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 09384-10165 200 "777 888 999" >& ~/cbrozmann/log_12_utd_train.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 10166-10947 200 "777 888 999" >& ~/cbrozmann/log_13_utd_train.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 10948-11729 200 "777 888 999" >& ~/cbrozmann/log_14_utd_train.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 11730-12511 200 "777 888 999" >& ~/cbrozmann/log_15_utd_train.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 12512-13293 200 "777 888 999" >& ~/cbrozmann/log_16_utd_train.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 13294-14075 200 "777 888 999" >& ~/cbrozmann/log_17_utd_train.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 14076-14857 200 "777 888 999" >& ~/cbrozmann/log_18_utd_train.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 14858-15624 200 "777 888 999" >& ~/cbrozmann/log_19_utd_train.txt &
+
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 00000-00781 12 "777 888 999" >& ~/cbrozmann/log_00_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 00782-01563 12 "777 888 999" >& ~/cbrozmann/log_01_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 01564-02345 12 "777 888 999" >& ~/cbrozmann/log_02_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 02346-03127 12 "777 888 999" >& ~/cbrozmann/log_03_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-utd-mhad.sh 03128-03909 12 "777 888 999" >& ~/cbrozmann/log_04_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 03910-04691 12 "777 888 999" >& ~/cbrozmann/log_05_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 04692-05473 12 "777 888 999" >& ~/cbrozmann/log_06_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 05474-06255 12 "777 888 999" >& ~/cbrozmann/log_07_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 06256-07037 12 "777 888 999" >& ~/cbrozmann/log_08_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-utd-mhad.sh 07038-07819 12 "777 888 999" >& ~/cbrozmann/log_09_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 07820-08601 12 "777 888 999" >& ~/cbrozmann/log_10_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 08602-09383 12 "777 888 999" >& ~/cbrozmann/log_11_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 09384-10165 12 "777 888 999" >& ~/cbrozmann/log_12_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 10166-10947 12 "777 888 999" >& ~/cbrozmann/log_13_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-utd-mhad.sh 10948-11729 12 "777 888 999" >& ~/cbrozmann/log_14_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 11730-12511 12 "777 888 999" >& ~/cbrozmann/log_15_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 12512-13293 12 "777 888 999" >& ~/cbrozmann/log_16_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 13294-14075 12 "777 888 999" >& ~/cbrozmann/log_17_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 14076-14857 12 "777 888 999" >& ~/cbrozmann/log_18_utd_train_small.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-utd-mhad.sh 14858-15624 12 "777 888 999" >& ~/cbrozmann/log_19_utd_train_small.txt &
+
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 00000-00781 200 "777" >& ~/cbrozmann/log_00_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 00782-01563 200 "777" >& ~/cbrozmann/log_01_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 01564-02345 200 "777" >& ~/cbrozmann/log_02_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 02346-03127 200 "777" >& ~/cbrozmann/log_03_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 03128-03909 200 "777" >& ~/cbrozmann/log_04_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 03910-04691 200 "777" >& ~/cbrozmann/log_05_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 04692-05473 200 "777" >& ~/cbrozmann/log_06_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 05474-06255 200 "777" >& ~/cbrozmann/log_07_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 06256-07037 200 "777" >& ~/cbrozmann/log_08_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 07038-07819 200 "777" >& ~/cbrozmann/log_09_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 07820-08601 200 "777" >& ~/cbrozmann/log_10_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 08602-09383 200 "777" >& ~/cbrozmann/log_11_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 09384-10165 200 "777" >& ~/cbrozmann/log_12_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 10166-10947 200 "777" >& ~/cbrozmann/log_13_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 10948-11729 200 "777" >& ~/cbrozmann/log_14_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 11730-12511 200 "777" >& ~/cbrozmann/log_15_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 12512-13293 200 "777" >& ~/cbrozmann/log_16_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 13294-14075 200 "777" >& ~/cbrozmann/log_17_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 14076-14857 200 "777" >& ~/cbrozmann/log_18_ntu60_200epochs.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 14858-15624 200 "777" >& ~/cbrozmann/log_19_ntu60_200epochs.txt &
+
+
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 00000-00781 200 "777" >& ~/cbrozmann/log_00_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 00782-01563 200 "777" >& ~/cbrozmann/log_01_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 01564-02345 200 "777" >& ~/cbrozmann/log_02_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 02346-03127 200 "777" >& ~/cbrozmann/log_03_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=0 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 03128-03909 200 "777" >& ~/cbrozmann/log_04_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 03910-04691 200 "777" >& ~/cbrozmann/log_05_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 04692-05473 200 "777" >& ~/cbrozmann/log_06_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 05474-06255 200 "777" >& ~/cbrozmann/log_07_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 06256-07037 200 "777" >& ~/cbrozmann/log_08_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=1 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 07038-07819 200 "777" >& ~/cbrozmann/log_09_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 07820-08601 200 "777" >& ~/cbrozmann/log_10_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 08602-09383 200 "777" >& ~/cbrozmann/log_11_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 09384-10165 200 "777" >& ~/cbrozmann/log_12_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 10166-10947 200 "777" >& ~/cbrozmann/log_13_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=2 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 10948-11729 200 "777" >& ~/cbrozmann/log_14_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 11730-12511 200 "777" >& ~/cbrozmann/log_15_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 12512-13293 200 "777" >& ~/cbrozmann/log_16_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 13294-14075 200 "777" >& ~/cbrozmann/log_17_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 14076-14857 200 "777" >& ~/cbrozmann/log_18_ntu60_200epochs_restart.txt &
+CUDA_VISIBLE_DEVICES=3 bash scripts/NATS-Bench/own_train-ntu60_cross_subject_new.sh 14858-15624 200 "777" >& ~/cbrozmann/log_19_ntu60_200epochs_restart.txt &
