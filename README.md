@@ -43,4 +43,7 @@ or use only average pooling.
 * The files in "changed_code" are needed to replicate the training of the thesis. More information in *explanations/How_to_get_started.md*.
 * The files in "helper_code" are the files that were used to transform all data of the UTD-MHAD, NTU RGB+D, and NTU RGB+D 120 data sets (last one was not trained). More information in *explanations/*How_to_add_a_new_dataset.md** and *explanations/How_to_get_started.md*.
 
-
+## Training results
+* Training result on NTU RGB+D: [Seed 777](https://agas.uni-koblenz.de/nas_skeleton/ntu_seed_777.tar.gz)
+* Training result on UTD_MHAD: [Seed 777](https://agas.uni-koblenz.de/nas_skeleton/utdmhad_seed_777.tar.gz), [Seed 888](https://agas.uni-koblenz.de/nas_skeleton/utdmhad_seed_888.tar.gz), [Seed 999](https://agas.uni-koblenz.de/nas_skeleton/utdmhad_seed_999.tar.gz)
+* [Logs and preprocessed training results](https://agas.uni-koblenz.de/nas_skeleton/training_results_nas_skeleton.zip)
